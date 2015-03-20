@@ -30,6 +30,7 @@ class Idxer:
         self.sentenceNum = 0
         self.stopWord = {}
         self.loadStopWord()
+
     def loadStopWord(self):
         fp = open("./stopword")
         line = fp.readline()
@@ -48,7 +49,7 @@ class Idxer:
         self.sentenceNum += len(sentenceLs)
         for si, sentence in enumerate(sentenceLs):
             wordLs = self.rgx2.split(sentence.strip().lower())
-            wordLs = [stem(word) for word in wordLs]
+            wordLs = [stem(word) for word in wordLs if ((word not in self.stopWord) and (word is not u''))]
             for word in wordLs:
                 if word not in self.invertedIdx:
                     self.invertedIdx[word] = []
