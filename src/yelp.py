@@ -104,13 +104,25 @@ def retrieveMutualInfo(idxer, word):
     for i in xrange(min(20, len(relWordLs))):
         print relWordLs[i]
 
+def entropy(px):
+    return px*np.log(px) + (1-px)*np.log(1-px)
 
+def retrieveEntropy(idxer):
+    enLs = []
+    for word, docLs in idxer.invertedIdx.items():
+        px = float(len(docLs))/idxer.sentenceNum
+        en = entropy(px)
+        enLs.append((word, px))
+    enLs = sorted(enLs, key=lambda x: x[1], reverse = True)
+    for i in xrange(100):
+        print enLs[i]
 
 if __name__ == "__main__":
     start_time = time.time()
     idxer = Idxer()
     read_yelp(idxer)
     #print len(idxer.invertedIdx)
+    retrieveEntropy(idxer)
     while True:
         word = raw_input('Search?')
         word = stem(word.strip().lower())
